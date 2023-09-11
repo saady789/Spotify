@@ -111,3 +111,5 @@ export default function Home() {
     </main>
   )
 }
+
+// this is the front page of the application 
