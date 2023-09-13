@@ -9,7 +9,6 @@ export default function Home() {
           <IoIosArrowForward className=" bg-black rounded-full p-2  text-neutral-400 m-1 text-4xl hover:text-white ml-2 cursor-pointer" />
         </div>
         <div className='h-full w-1/2 flex justify-end m-2 text-center'>
-        <button className='rounded-lg rounded-l-full rounded-r-full  mr-4 h-1/2 p-2 font-semibold hover:text-white  text-xl items-center'>Signup</button>
         <button className='rounded-lg rounded-l-full rounded-r-full mr-4 h-1/2 p-2 font-semibold hover:text-white  text-xl'>Login</button>
 
 
