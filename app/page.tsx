@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+"use client"
+import React, { useState, useEffect } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { GoogleAuthProvider } from 'firebase/auth';
 import { signInWithPopup } from 'firebase/auth';
@@ -15,13 +16,17 @@ export default function Home() {
   const [status, setStatus] = useState(false);
   const provider = new GoogleAuthProvider();
 
-  // Declare currentUser outside the if block
-  let currentUser: User | null = null;
+  // Declare currentUser and initialize it to null
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  if (localStorage.getItem("user")) {
-    // Parse the user object from localStorage
-    currentUser = JSON.parse(localStorage.getItem("user")) as User;
-  }
+  useEffect(() => {
+    // Load user data from localStorage when the component mounts
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser) as User;
+      setCurrentUser(user);
+    }
+  }, []); // Empty dependency array to run only once when the component mounts
 
   const handleLogin = async () => {
     try {
@@ -29,10 +34,16 @@ export default function Home() {
       const { user } = await signInWithPopup(firebaseAuth, provider);
       let obj = { name: user?.displayName, email: user?.email, image: user?.photoURL, id: user?.uid };
       localStorage.setItem("user", JSON.stringify(obj));
-      currentUser = obj; // Update the currentUser
+      setCurrentUser(obj); // Update the currentUser state
       window.location.href = "/";
     } catch (e) {
       console.log("An error has occurred ", e);
+    }
+  }
+  const handleLogout = async () => {
+    if(localStorage.getItem("user")) { 
+      localStorage.removeItem("user");
+      window.location.href = "/";
     }
   }
 
@@ -45,8 +56,8 @@ export default function Home() {
         </div>
         {currentUser ? (
           <div className='h-full w-1/2 flex justify-end m-2 text-center'>
-            <button className='rounded-lg rounded-l-full rounded-r-full mr-4 h-1/2 p-2 font-semibold hover:text-white text-xl' disabled={status} onClick={handleLogin}>Logout</button>
-            <img alt="img" src={currentUser.image} />
+            <button className='rounded-lg rounded-l-full rounded-r-full mr-4 h-1/2 p-2 font-semibold hover:text-white text-xl'  onClick={handleLogout}>Logout</button>
+            <img alt="img" src={currentUser.image || ''} className='rounded-full' /> 
           </div>
         ) : (
           <div className='h-full w-1/2 flex justify-end m-2 text-center'>
