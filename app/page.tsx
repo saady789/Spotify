@@ -41,6 +41,7 @@ export default function Home() {
     }
   }
   const handleLogout = async () => {
+    setStatus(true);
     if(localStorage.getItem("user")) { 
       localStorage.removeItem("user");
       window.location.href = "/";
