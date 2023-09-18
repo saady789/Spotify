@@ -4,7 +4,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { GoogleAuthProvider } from 'firebase/auth';
 import { signInWithPopup } from 'firebase/auth';
 import { firebaseAuth } from './firebase/firebase';
-
+import {toast} from "react-toastify";
 interface User {
   name: string | null;
   email: string | null;
@@ -15,7 +15,19 @@ interface User {
 export default function Home() {
   const [status, setStatus] = useState(false);
   const provider = new GoogleAuthProvider();
-
+  
+  function generateUniqueId() {
+    const characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+    const idLength = 10;
+    let uniqueId = '';
+  
+    for (let i = 0; i < idLength; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      uniqueId += characters.charAt(randomIndex);
+    }
+  
+    return uniqueId;
+  }
   // Declare currentUser and initialize it to null
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -33,9 +45,27 @@ export default function Home() {
       setStatus(true);
       const { user } = await signInWithPopup(firebaseAuth, provider);
       let obj = { name: user?.displayName, email: user?.email, image: user?.photoURL, id: user?.uid };
-      localStorage.setItem("user", JSON.stringify(obj));
-      setCurrentUser(obj); // Update the currentUser state
-      window.location.href = "/";
+      console.log(obj);
+      const url = "/api/createUser";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Add any other headers you need here
+        },
+        body: JSON.stringify(obj),
+      });
+    
+      const responseData = await response.json();
+      
+      
+      if(responseData != "InternalServerError"){
+        toast.success("Welcome Back");
+        localStorage.setItem("user",JSON.stringify(responseData));
+        setCurrentUser(responseData); // Update the currentUser state
+        window.location.href = "/";
+      }
+      
     } catch (e) {
       console.log("An error has occurred ", e);
     }
