@@ -1,10 +1,27 @@
 "use client"
-import React from 'react'
+import React,{useEffect} from 'react'
+import { useDispatch } from 'react-redux';
 import { AiFillHome } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs"
 import { BsMusicNoteList } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
+import { setCurrentUser,openModal } from '../redux/userSlice';
 const Sidebar = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const getUser = async() => {
+            let x = localStorage.getItem("user");
+            if(x){
+                await dispatch(setCurrentUser(JSON.parse(x)));
+            }
+        }
+      getUser();
+    }, [])
+
+    const handleOpen = async() => {
+        await dispatch(openModal());
+    }
+    
     return (
         <div className='w-full h-full flex-col'>
             <div className='w-full h-1/5 bg-neutral-900 rounded-lg m-2 '>
@@ -23,7 +40,7 @@ const Sidebar = () => {
                 <div className=' w-full h-16 flex justify start items-center cursor-pointer m-0'>
                     <BsMusicNoteList className="  text-neutral-400 m-1 text-2xl hover:text-white ml-2" />
                     <h1 className='m-1 text-xl font-bold text-neutral-400 hover:text-white ml-2'>Your Library</h1>
-                    <div className=' w-32 flex justify-end' >
+                    <div className=' w-32 flex justify-end' onClick={handleOpen}>
                         <AiOutlinePlus className="  text-neutral-400 m-1 text-2xl hover:text-white ml-2" />
 
                     </div>

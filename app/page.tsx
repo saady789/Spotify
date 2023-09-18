@@ -4,7 +4,12 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { GoogleAuthProvider } from 'firebase/auth';
 import { signInWithPopup } from 'firebase/auth';
 import { firebaseAuth } from './firebase/firebase';
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
+import { useCurrentUser } from './hooks/useCurrentUser';
+import Modal from './components/Modal';
+import Upload from './components/Upload';
+import NotAllowed from './components/NotAllowed';
+import { useAppSelector } from './hooks/hooks';
 interface User {
   name: string | null;
   email: string | null;
@@ -13,21 +18,10 @@ interface User {
 }
 
 export default function Home() {
+  const m = useAppSelector((state) => state?.user?.currentUser);
   const [status, setStatus] = useState(false);
   const provider = new GoogleAuthProvider();
-  
-  function generateUniqueId() {
-    const characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-    const idLength = 10;
-    let uniqueId = '';
-  
-    for (let i = 0; i < idLength; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      uniqueId += characters.charAt(randomIndex);
-    }
-  
-    return uniqueId;
-  }
+
   // Declare currentUser and initialize it to null
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -55,48 +49,56 @@ export default function Home() {
         },
         body: JSON.stringify(obj),
       });
-    
+
       const responseData = await response.json();
-      
-      
-      if(responseData != "InternalServerError"){
+
+
+      if (responseData != "InternalServerError") {
         toast.success("Welcome Back");
-        localStorage.setItem("user",JSON.stringify(responseData));
+        useCurrentUser("set", responseData)
         setCurrentUser(responseData); // Update the currentUser state
         window.location.href = "/";
       }
-      
+
     } catch (e) {
       console.log("An error has occurred ", e);
     }
   }
   const handleLogout = async () => {
     setStatus(true);
-    if(localStorage.getItem("user")) { 
-      localStorage.removeItem("user");
-      window.location.href = "/";
-    }
+    useCurrentUser("del", null)
+    window.location.href = "/";
+
   }
 
   return (
-    <div className='rounded-lg h-full w-full text-green-500 bg-gradient-to-t from-black via-black to-green-900'>
-      <div className='w-full h-16 flex '>
-        <div className='m-2 h-full w-1/2 flex justify-start '>
-          <IoIosArrowBack className="bg-black rounded-full p-2 text-neutral-400 m-1 text-4xl hover:text-white ml-2 cursor-pointer" />
-          <IoIosArrowForward className="bg-black rounded-full p-2 text-neutral-400 m-1 text-4xl hover:text-white ml-2 cursor-pointer" />
+    <>
+
+      <div className='rounded-lg h-full w-full text-green-500 bg-gradient-to-t from-black via-black to-green-900'>
+        <div className='w-full h-16 flex '>
+          <div className='m-2 h-full w-1/2 flex justify-start '>
+            <IoIosArrowBack className="bg-black rounded-full p-2 text-neutral-400 m-1 text-4xl hover:text-white ml-2 cursor-pointer" />
+            <IoIosArrowForward className="bg-black rounded-full p-2 text-neutral-400 m-1 text-4xl hover:text-white ml-2 cursor-pointer" />
+          </div>
+          {currentUser ? (
+            <div className='h-full w-1/2 flex justify-end m-2 text-center'>
+              <button className='rounded-lg rounded-l-full rounded-r-full mr-4 h-1/2 p-2 font-semibold hover:text-white text-xl' onClick={handleLogout}>Logout</button>
+              <img alt="img" src={currentUser.image || ''} className='rounded-full' />
+            </div>
+          ) : (
+            <div className='h-full w-1/2 flex justify-end m-2 text-center'>
+              <button className='rounded-lg rounded-l-full rounded-r-full mr-4 h-1/2 p-2 font-semibold hover:text-white text-xl' disabled={status} onClick={handleLogin}>Login</button>
+            </div>
+          )}
         </div>
-        {currentUser ? (
-          <div className='h-full w-1/2 flex justify-end m-2 text-center'>
-            <button className='rounded-lg rounded-l-full rounded-r-full mr-4 h-1/2 p-2 font-semibold hover:text-white text-xl'  onClick={handleLogout}>Logout</button>
-            <img alt="img" src={currentUser.image || ''} className='rounded-full' /> 
-          </div>
-        ) : (
-          <div className='h-full w-1/2 flex justify-end m-2 text-center'>
-            <button className='rounded-lg rounded-l-full rounded-r-full mr-4 h-1/2 p-2 font-semibold hover:text-white text-xl' disabled={status} onClick={handleLogin}>Login</button>
-          </div>
-        )}
+        <h1 className='text-white text-4xl font-semibold m-2'>Welcome Back</h1>
       </div>
-      <h1 className='text-white text-xl font-semibold m-2'>Welcome Back</h1>
-    </div>
+      <Modal>
+        {
+          m?( <Upload/>):(<NotAllowed/>)
+        }
+     
+      </Modal>
+    </>
   )
 }
