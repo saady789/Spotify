@@ -4,12 +4,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface State { 
     currentUser: null | object ,
-    modal : "close" | "open"
+    modal : "close" | "open",
+    socket :"on" | "off"
 }
 
 const initialState : State = {
     currentUser:null,
-    modal:"close"
+    modal:"close",
+    socket:"on"
 
 };
 
@@ -25,10 +27,21 @@ export const userSlice = createSlice({
             state.currentUser = action.payload
         },
         openModal:(state) => {
-            state.modal = "open";
+            if(state.socket=="on"){
+                state.modal = "open";
+            }
+            
         },
         closeModal:(state) => {
-            state.modal = "close";
+            if(state.socket=="on"){
+                state.modal = "close";
+            }
+        },
+        onModal:(state) => {
+            state.socket = "on";
+        },
+        offModal:(state) => {
+            state.socket = "off";
         }
     },
     
@@ -36,5 +49,5 @@ export const userSlice = createSlice({
 
 });
 
-export const { setCurrentUser,openModal,closeModal } = userSlice.actions;
+export const { setCurrentUser,openModal,closeModal,onModal,offModal  } = userSlice.actions;
 export default userSlice.reducer;

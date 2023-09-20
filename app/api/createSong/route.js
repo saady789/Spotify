@@ -1,22 +1,27 @@
-import { create } from "domain";
 import prisma from "../../prismaClient/prismaClient";
 import { NextResponse } from "next/server";
-
-
 export async function POST (request) {
 
+   try{
     const body = await request.json();
-    const{id,name,email,image} = body;
-    const createUser = await prisma.user.create({
-        data:{
-            id:id,
-            email:email,
-            name:name,
-            image:image
-
-        },
-    })
-    if(!createUser) return NextResponse({"status":"error"});
-    return NextResponse({"status":"success"});
+    const{title,thumbnail,song} = body;
+    let id = body.currentUser.id;
+        const createSong = await prisma.song.create({
+            data:{
+                title,
+                thumbnail,
+                song,
+                uploadedBy:{connect:{id}}
+            },
+            include: { uploadedBy: true },
+        })
+        if(!createSong) return NextResponse.json("InternalServerError");
+        return NextResponse.json(createSong);
+   
+   } catch(error) {
+    console.log(error);
+    return NextResponse.json("InternalServerError")
+   }
+    
    
 }
