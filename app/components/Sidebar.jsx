@@ -5,7 +5,7 @@ import { AiFillHome } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs"
 import { BsMusicNoteList } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
-import { setCurrentUser, openModal } from '../redux/userSlice';
+import { setCurrentUser, openModal , setCurrentSong } from '../redux/userSlice';
 import { setPage, setMySongs } from '../redux/userSlice';
 import { useAppSelector } from '../hooks/hooks';
 
@@ -86,7 +86,7 @@ const Sidebar = () => {
                 {m && mySongs.length !== 0 &&
                     <div className='w-full overflow-y-auto'>
                         {mySongs.map((song, index) => (
-                            <div className='w-full h-20 mt-2 flex items-center cursor-pointer rounded-lg hover:bg-neutral-700' key={index}>
+                            <div className='w-full h-20 mt-2 flex items-center cursor-pointer rounded-lg hover:bg-neutral-700' key={index} onClick={async()=>{await dispatch(setCurrentSong(song))}}>
                                 <img src={song?.thumbnail} alt="img" className='w-1/3 h-3/4 rounded-lg ml-4' />
                                 <h1 className='text-white font-semibold ml-4' >{song?.title}</h1>
 

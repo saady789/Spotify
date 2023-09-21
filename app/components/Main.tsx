@@ -6,8 +6,8 @@ import Modal from '../components/Modal';
 import Upload from '../components/Upload';
 import NotAllowed from '../components/NotAllowed';
 import { useAppSelector } from '../hooks/hooks';
-import { AiFillHeart } from "react-icons/ai";
-import {setPage} from "../redux/userSlice";
+import { AiFillHeart , AiOutlineHeart } from "react-icons/ai";
+import {setPage , setCurrentSong } from "../redux/userSlice";
 import { useDispatch } from 'react-redux';
 import Allsongs from './Allsongs';
 

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useCurrentUser } from '../hooks/useCurrentUser';
 import { useAppSelector } from '../hooks/hooks';
 import { useDispatch } from 'react-redux';
-
+import { setPage } from '../redux/userSlice';
 interface User {
     name: string | null;
     email: string | null;
@@ -16,7 +16,9 @@ interface User {
     id: string | null;
 }
 const Login = () => {
-    
+    const dispatch = useDispatch();
+    const timeLine = useAppSelector((state)=>state?.user?.navigation);
+
     const [status, setStatus] = useState(false);
     const provider = new GoogleAuthProvider();
 

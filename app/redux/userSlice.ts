@@ -7,7 +7,9 @@ interface State {
     currentPage:"main" | "search" | "liked"
     modal : "close" | "open",
     socket :"on" | "off",
-    mySongs: object
+    mySongs: object,
+    navigation:string[],
+    currentSong:object | null
 }
 
 const initialState : State = {
@@ -15,7 +17,9 @@ const initialState : State = {
     modal:"close",
     socket:"on",
     currentPage:"main",
-    mySongs:[]
+    mySongs:[],
+    navigation:[],
+    currentSong:null
 
 };
 
@@ -48,10 +52,14 @@ export const userSlice = createSlice({
             state.socket = "off";
         },
         setPage:(state,action) => {
+            state.navigation.push(action.payload);
             state.currentPage = action.payload;
         },
         setMySongs:(state,action) => {
             state.mySongs = action.payload;
+        },
+        setCurrentSong:(state,action) => {
+            state.currentSong = action.payload;
         }
     },
     
@@ -59,5 +67,5 @@ export const userSlice = createSlice({
 
 });
 
-export const { setCurrentUser,openModal,closeModal,onModal,offModal ,setPage,setMySongs } = userSlice.actions;
+export const { setCurrentUser,openModal,closeModal,onModal,offModal ,setPage,setMySongs,setCurrentSong} = userSlice.actions;
 export default userSlice.reducer;
