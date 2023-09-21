@@ -4,14 +4,18 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface State { 
     currentUser: null | object ,
+    currentPage:"main" | "search" | "liked"
     modal : "close" | "open",
-    socket :"on" | "off"
+    socket :"on" | "off",
+    mySongs: object
 }
 
 const initialState : State = {
     currentUser:null,
     modal:"close",
-    socket:"on"
+    socket:"on",
+    currentPage:"main",
+    mySongs:[]
 
 };
 
@@ -42,6 +46,12 @@ export const userSlice = createSlice({
         },
         offModal:(state) => {
             state.socket = "off";
+        },
+        setPage:(state,action) => {
+            state.currentPage = action.payload;
+        },
+        setMySongs:(state,action) => {
+            state.mySongs = action.payload;
         }
     },
     
@@ -49,5 +59,5 @@ export const userSlice = createSlice({
 
 });
 
-export const { setCurrentUser,openModal,closeModal,onModal,offModal  } = userSlice.actions;
+export const { setCurrentUser,openModal,closeModal,onModal,offModal ,setPage,setMySongs } = userSlice.actions;
 export default userSlice.reducer;
