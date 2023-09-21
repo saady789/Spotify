@@ -9,7 +9,9 @@ import Player from './components/Player';
 export default function Home() {
   // const m = useAppSelector((state) => state?.user?.currentUser);
   const currentPage = useAppSelector((state) => state?.user?.currentPage);
+  const currentsong = useAppSelector((state) => state?.user?.currentSong);
 
+  
  
 
   return (
@@ -17,7 +19,8 @@ export default function Home() {
 { currentPage ==="main" && <Main/> }
 { currentPage ==="search" && <Search/> }
 { currentPage ==="liked" && <Liked/> }
-<Player />
+{ currentsong && <Player />}
+
 
       
     </>

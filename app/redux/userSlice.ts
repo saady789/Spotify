@@ -60,6 +60,9 @@ export const userSlice = createSlice({
         },
         setCurrentSong:(state,action) => {
             state.currentSong = action.payload;
+        },
+        removeCurrentSong:(state) => {
+            state.currentSong = null;
         }
     },
     
@@ -67,5 +70,5 @@ export const userSlice = createSlice({
 
 });
 
-export const { setCurrentUser,openModal,closeModal,onModal,offModal ,setPage,setMySongs,setCurrentSong} = userSlice.actions;
+export const { setCurrentUser,openModal,closeModal,onModal,offModal ,setPage,setMySongs,setCurrentSong,removeCurrentSong} = userSlice.actions;
 export default userSlice.reducer;
