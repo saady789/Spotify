@@ -12,13 +12,34 @@ const Allsongs = () => {
     const currentUser = useAppSelector((state) => state?.user?.currentUser);
     const Lsongs = useAppSelector((state) => state?.user?.likedSongs);
     const handleLike = async (card) => {
-        let currentsong = card;
+        console.log("The card is ",card);
+        let currentSong = card;
         let data = {};
         data.currentUser = currentUser;
-        data.currentsong = currentsong;
+        data.currentSong = currentSong;
         await dispatch(likeSongAsync(data));
         await dispatch(getlikeSongAsync({ id: currentUser?.id }))
     }
+
+    const checkSong = (song) =>{
+        console.log("The song is",song)
+        console.log("ALl songs are ",Lsongs)
+        let ID = song.id;
+        Lsongs.map((item)=>{
+            if(item.likedSongId === ID){
+                console.log("true");
+                return true;
+                
+            }
+        })
+
+
+        // console.log("false");
+        // return false;
+
+
+        
+     }
 
     return (
         <>
@@ -32,7 +53,7 @@ const Allsongs = () => {
                         <div className='flex justify-start items-center w-full mt-2 ml-2 '>
                             <div className='w-1/2' ><  AiFillPlayCircle className=" cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300" onClick={async () => { await dispatch(setCurrentSong(card)) }} /></div>
                             <div className='w-1/2' >
-                                {Lsongs?.includes(card) ? (
+                                {checkSong(card) ? (
                                     <  BiSolidLike className=" mt-2 text-4xl rounded-full  hover:text-green-300" />
 
                                 ) : (

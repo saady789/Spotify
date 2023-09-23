@@ -18,12 +18,12 @@ const Search = () => {
   const Lsongs =  useAppSelector((state) => state?.user?.likedSongs);
 
   const dispatch = useDispatch();
-  const inputRef = useRef < HTMLInputElement | null > (null); // Create a ref for the input element
+  const inputRef = useRef(null); // Create a ref for the input element
   const m = useAppSelector((state) => state?.user?.currentUser);
   const [status, setStatus] = useState("start"); // either idle or searching; initially start 
   const [songs, setSongs] = useState([]);
   const searchsong = async () => {
-    if (inputRef.current) {
+    if (inputRef?.current) {
       setStatus("working");
       const inputValue = inputRef.current.value;
       const arr = inputValue.split(" ");
@@ -55,11 +55,15 @@ const Search = () => {
   const searchSong = debounce(searchsong, 1000);
   const handleLike = async (item) => {
     let data = {};
-    let currentsong = item;
+    let currentSong = item;
     data.currentUser = currentUser;
-    data.currentsong = currentsong;
+    data.currentSong = currentSong;
     await dispatch(likeSongAsync(data));
     await dispatch(getlikeSongAsync({ id: currentUser?.id }))
+  }
+
+  const checkSong = (song) =>{
+     return true;
   }
 
 
@@ -95,7 +99,7 @@ const Search = () => {
                   <div className='flex justify-center items-center'>
                     <div className='w-1/2 ' ><  AiFillPlayCircle className="cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300" onClick={async () => { await dispatch(setCurrentSong(item)) }} /></div>
                     <div className='w-1/2 ' >
-                      {Lsongs?.includes(item)?(
+                      {checkSong(item)?(
                       <  BiSolidLike className=" mt-2 text-4xl rounded-full  hover:text-green-300" />
 
                       ):(

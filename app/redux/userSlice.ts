@@ -48,7 +48,7 @@ export const likeSongAsync = createAsyncThunk(
 export const getlikeSongAsync = createAsyncThunk(
     'song/getlikeSong',
     async (data) => {
-        console.log("The data is" ,data)
+        
         let url = "/api/getLikedSong";
         
         const response = await fetch(url, {

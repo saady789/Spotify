@@ -7,7 +7,7 @@ import Upload from '../components/Upload';
 import NotAllowed from '../components/NotAllowed';
 import { useAppSelector } from '../hooks/hooks';
 import { AiFillHeart , AiOutlineHeart } from "react-icons/ai";
-import {setPage , setCurrentSong } from "../redux/userSlice";
+import {setPage , setCurrentSong,getlikeSongAsync,likeSongAsync } from "../redux/userSlice";
 import { useDispatch } from 'react-redux';
 import Allsongs from './Allsongs';
 

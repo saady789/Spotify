@@ -8,7 +8,7 @@ import { BsPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
 import { BiSolidLike, BiLike } from "react-icons/bi";
 import { FaVolumeMute } from "react-icons/fa"
 import { VscUnmute } from "react-icons/vsc";
-import { likeSongAsync } from '../redux/userSlice';
+import { likeSongAsync , getlikeSongAsync} from '../redux/userSlice';
 const Player = () => {
   const dispatch = useDispatch();
   const [playing, setPlaying] = useState(true);
@@ -116,6 +116,7 @@ const Player = () => {
     data.currentUser = currentUser;
     data.currentSong = currentSong;
     await dispatch(likeSongAsync(data));
+    await dispatch(getlikeSongAsync({ id: currentUser?.id }))
 
   }
 
