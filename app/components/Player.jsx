@@ -8,6 +8,7 @@ import { BsPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
 import { BiSolidLike, BiLike } from "react-icons/bi";
 import { FaVolumeMute } from "react-icons/fa"
 import { VscUnmute } from "react-icons/vsc";
+import { likeSongAsync } from '../redux/userSlice';
 const Player = () => {
   const dispatch = useDispatch();
   const [playing, setPlaying] = useState(true);
@@ -15,8 +16,10 @@ const Player = () => {
 
   const [volume, setVolume] = useState(0.6); // 1 is full volume, 0 is muted
   const [muted, setMuted] = useState(false);
+  const currentUser = useAppSelector((state) => state?.user?.currentUser);
 
   const currentSong = useAppSelector((state) => state?.user?.currentSong);
+  document.title = currentSong?.title;
   const [play, { pause, stop }] = useSound(currentSong?.song, {
     position: position, // Set the initial playback position
     volume: volume
@@ -68,11 +71,6 @@ const Player = () => {
     setPlaying(true);
   }
 
-
-
-
-
-
   useEffect(() => {
     handleStop();
 
@@ -112,6 +110,14 @@ const Player = () => {
    }
   }, [volume])
   
+  const handleLike = async() => {
+    console.log("liked");
+    let data = {};
+    data.currentUser = currentUser;
+    data.currentSong = currentSong;
+    await dispatch(likeSongAsync(data));
+
+  }
 
 
 
@@ -124,7 +130,7 @@ const Player = () => {
             <img alt="img" src={currentSong?.thumbnail} className='rounded-lg h-16 w-30 ' />
             <div className='flex flex-col'>
               <h1 className='font-bold text-2xl ml-2 text-green-500'>{currentSong?.title}</h1>
-              <BiLike className="cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300 ml-2 text-green-500" />
+              <BiLike className="cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300 ml-2 text-green-500" onClick={handleLike}/>
             </div>
           </div>
           <div className='flex flex-col h-full w-1/3 justify-center items-center'>

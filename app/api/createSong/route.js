@@ -1,7 +1,6 @@
 import prisma from "../../prismaClient/prismaClient";
 import { NextResponse } from "next/server";
 export async function POST (request) {
-
    try{
     const body = await request.json();
     const{title,thumbnail,song} = body;
@@ -21,7 +20,5 @@ export async function POST (request) {
    } catch(error) {
     console.log(error);
     return NextResponse.json("InternalServerError")
-   }
-    
-   
+   }  
 }

@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/firebase/firebase.ss", "app/page.jsx", "app/api/likeSong/route.js", "app/api/createUser/route.js", "app/api/createSong/route.js", "app/components/Upload.jsx", "app/components/Sidebar.jsx", "app/components/Allsongs.jsx", "app/components/Player.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/firebase/firebase.ss", "app/page.jsx", "app/api/likeSong/route.js", "app/api/createUser/route.js", "app/api/createSong/route.js", "app/components/Upload.jsx", "app/components/Sidebar.jsx", "app/components/Allsongs.jsx", "app/components/Player.jsx", "app/components/Search.jsx"],
   "exclude": ["node_modules"]
 }

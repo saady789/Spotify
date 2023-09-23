@@ -1,20 +1,24 @@
 "use client"
 import React, { useState, useRef } from 'react'
 import Login from './Login'
-import Modal from '../components/Modal';
-import Upload from '../components/Upload';
-import NotAllowed from '../components/NotAllowed';
+import Modal from './Modal';
+import Upload from './Upload';
+import NotAllowed from './NotAllowed';
 import { useAppSelector } from '../hooks/hooks';
 import { BsSearch } from "react-icons/bs";
 import debounce from 'lodash/debounce'; // Import debounce from lodash
 import { RotateLoader } from 'react-spinners'; // Import the PacmanLoader spinner
 import { AiFillPlayCircle } from "react-icons/ai"
 import { BiSolidLike, BiLike } from "react-icons/bi";
-import {setCurrentSong} from "../redux/userSlice";
+import { setCurrentSong, getlikeSongAsync, likeSongAsync } from "../redux/userSlice";
 import { useDispatch } from 'react-redux';
 const Search = () => {
+  // const currentsong = useAppSelector((state) => state?.user?.currentSong);
+  const currentUser = useAppSelector((state) => state?.user?.currentUser);
+  const Lsongs =  useAppSelector((state) => state?.user?.likedSongs);
+
   const dispatch = useDispatch();
-  const inputRef = useRef<HTMLInputElement | null>(null); // Create a ref for the input element
+  const inputRef = useRef < HTMLInputElement | null > (null); // Create a ref for the input element
   const m = useAppSelector((state) => state?.user?.currentUser);
   const [status, setStatus] = useState("start"); // either idle or searching; initially start 
   const [songs, setSongs] = useState([]);
@@ -49,6 +53,14 @@ const Search = () => {
 
   }
   const searchSong = debounce(searchsong, 1000);
+  const handleLike = async (item) => {
+    let data = {};
+    let currentsong = item;
+    data.currentUser = currentUser;
+    data.currentsong = currentsong;
+    await dispatch(likeSongAsync(data));
+    await dispatch(getlikeSongAsync({ id: currentUser?.id }))
+  }
 
 
   return (
@@ -81,8 +93,18 @@ const Search = () => {
                 <div className='flex flex-col justify-center items-center h-full  '>
                   <h1 className='font-semibold text-xl ml-2'>{item?.title}</h1>
                   <div className='flex justify-center items-center'>
-                    <div className='w-1/2 ' ><  AiFillPlayCircle className="cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300" onClick={async()=>{await dispatch(setCurrentSong(item))}} /></div>
-                    <div className='w-1/2 ' ><  BiLike className="cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300" /></div>
+                    <div className='w-1/2 ' ><  AiFillPlayCircle className="cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300" onClick={async () => { await dispatch(setCurrentSong(item)) }} /></div>
+                    <div className='w-1/2 ' >
+                      {Lsongs?.includes(item)?(
+                      <  BiSolidLike className=" mt-2 text-4xl rounded-full  hover:text-green-300" />
+
+                      ):(
+                        <  BiLike className="cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300" onClick={() => handleLike(item)}/>
+
+                      )}
+                    
+                    
+                    </div>
                   </div>
                 </div>
               </div>

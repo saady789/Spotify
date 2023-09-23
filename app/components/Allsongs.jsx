@@ -1,12 +1,24 @@
 import React from 'react';
 import { useAppSelector } from '../hooks/hooks';
-import {AiFillPlayCircle } from "react-icons/ai"
-import {BiSolidLike,BiLike} from "react-icons/bi";
-import { setCurrentSong } from '../redux/userSlice';
+import { AiFillPlayCircle } from "react-icons/ai"
+import { BiSolidLike, BiLike } from "react-icons/bi";
 import { useDispatch } from 'react-redux';
+import { setCurrentSong, getlikeSongAsync, likeSongAsync } from "../redux/userSlice";
+
 const Allsongs = () => {
     const dispatch = useDispatch();
     const mySongs = useAppSelector((state) => state?.user?.mySongs);
+    // const currentsong = useAppSelector((state) => state?.user?.currentSong);
+    const currentUser = useAppSelector((state) => state?.user?.currentUser);
+    const Lsongs = useAppSelector((state) => state?.user?.likedSongs);
+    const handleLike = async (card) => {
+        let currentsong = card;
+        let data = {};
+        data.currentUser = currentUser;
+        data.currentsong = currentsong;
+        await dispatch(likeSongAsync(data));
+        await dispatch(getlikeSongAsync({ id: currentUser?.id }))
+    }
 
     return (
         <>
@@ -18,11 +30,20 @@ const Allsongs = () => {
                         <img alt="img" src={card?.thumbnail} className='w-7/8 h-7/8 rounded-lg' />
                         <h2 className="text-lg mt-2 font-semibold">{card.title}</h2>
                         <div className='flex justify-start items-center w-full mt-2 ml-2 '>
-                            <div className='w-1/2' ><  AiFillPlayCircle  className=" cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300" onClick={async()=>{await dispatch(setCurrentSong(card))}} /></div>
-                            <div className='w-1/2' ><  BiLike   className=" cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300"/></div>
+                            <div className='w-1/2' ><  AiFillPlayCircle className=" cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300" onClick={async () => { await dispatch(setCurrentSong(card)) }} /></div>
+                            <div className='w-1/2' >
+                                {Lsongs?.includes(card) ? (
+                                    <  BiSolidLike className=" mt-2 text-4xl rounded-full  hover:text-green-300" />
+
+                                ) : (
+                                    <  BiLike className="cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300" onClick={() => handleLike(card)} />
+
+                                )}
+
+                            </div>
 
                         </div>
-                        
+
                     </div>
                 ))}
             </div>

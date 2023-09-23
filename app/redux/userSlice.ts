@@ -1,6 +1,6 @@
 
 'use client'
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice,createAsyncThunk } from '@reduxjs/toolkit';
 
 interface State { 
     currentUser: null | object ,
@@ -9,7 +9,8 @@ interface State {
     socket :"on" | "off",
     mySongs: object,
     navigation:string[],
-    currentSong:object | null
+    currentSong:object | null,
+    likedSongs:object | null;
 }
 
 const initialState : State = {
@@ -19,9 +20,51 @@ const initialState : State = {
     currentPage:"main",
     mySongs:[],
     navigation:[],
-    currentSong:null
+    currentSong:null,
+    likedSongs:[]
 
 };
+
+export const likeSongAsync = createAsyncThunk(
+    'song/likeSong',
+    async (data) => {
+        console.log("The data is" ,data)
+        let url = "/api/likeSong";
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any additional headers if needed
+            },
+            body:JSON.stringify(data)
+        });
+        const d = await response.json();
+        console.log(d);
+        return d;
+    }
+);
+
+export const getlikeSongAsync = createAsyncThunk(
+    'song/getlikeSong',
+    async (data) => {
+        console.log("The data is" ,data)
+        let url = "/api/getLikedSong";
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any additional headers if needed
+            },
+            body:JSON.stringify(data)
+        });
+        const d = await response.json();
+        console.log(d);
+        return d;
+    }
+);
+
 
 
 export const userSlice = createSlice({
@@ -64,6 +107,26 @@ export const userSlice = createSlice({
         removeCurrentSong:(state) => {
             state.currentSong = null;
         }
+    },
+    extraReducers: (builder) => {
+        builder
+           
+            .addCase(likeSongAsync.pending, (state) => {
+                
+            })
+            .addCase(likeSongAsync.fulfilled, (state, action) => {
+                
+            })
+            .addCase(getlikeSongAsync.pending, (state) => {
+                
+            })
+            .addCase(getlikeSongAsync.fulfilled, (state, action) => {
+                if(action.payload==="InternalServerError" || action.payload ==="Not Found"){}
+                else {
+                    state.likedSongs = action.payload;
+                }
+            })
+            
     },
     
 
