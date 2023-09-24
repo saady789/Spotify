@@ -10,7 +10,8 @@ interface State {
     mySongs: object,
     navigation:string[],
     currentSong:object | null,
-    likedSongs:object | null;
+    likedSongs:object | null,
+    allSongs:object | null
 }
 
 const initialState : State = {
@@ -21,7 +22,8 @@ const initialState : State = {
     mySongs:[],
     navigation:[],
     currentSong:null,
-    likedSongs:[]
+    likedSongs:[],
+    allSongs:[]
 
 };
 
@@ -41,6 +43,25 @@ export const likeSongAsync = createAsyncThunk(
         });
         const d = await response.json();
         console.log(d);
+        return d;
+    }
+);
+
+export const AllSongAsync = createAsyncThunk(
+    'song/allSong',
+    async () => {
+        let url = "/api/allSong";
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any additional headers if needed
+            },
+            body:JSON.stringify({"saad":"yasir"})
+        });
+        const d = await response.json();
+    
         return d;
     }
 );
@@ -124,6 +145,15 @@ export const userSlice = createSlice({
                 if(action.payload==="InternalServerError" || action.payload ==="Not Found"){}
                 else {
                     state.likedSongs = action.payload;
+                }
+            })
+            .addCase(AllSongAsync.pending, (state) => {
+                
+            })
+            .addCase(AllSongAsync.fulfilled, (state, action) => {
+                if(action.payload==="InternalServerError" || action.payload ==="Not Found"){}
+                else {
+                    state.allSongs = action.payload;
                 }
             })
             

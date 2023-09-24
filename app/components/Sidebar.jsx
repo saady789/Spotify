@@ -8,6 +8,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { setCurrentUser, openModal , setCurrentSong } from '../redux/userSlice';
 import { setPage, setMySongs } from '../redux/userSlice';
 import { useAppSelector } from '../hooks/hooks';
+import {AllSongAsync} from "../redux/userSlice";
 
 const Sidebar = () => {
     const m = useAppSelector((state) => state?.user?.currentUser);
@@ -15,6 +16,14 @@ const Sidebar = () => {
 
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        const fetchSongs = async() => {
+            await dispatch(AllSongAsync());
+        }
+      fetchSongs();
+    }, [])
+    
     useEffect(() => {
         if (!m) return;
         const getMySongs = async () => {

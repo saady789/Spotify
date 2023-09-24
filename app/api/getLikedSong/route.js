@@ -6,7 +6,8 @@ export async function POST (request) {
     const{id} = body;
         
         const createSong = await prisma.likeSong.findMany({
-           where:{likedById:id}
+           where:{likedById:id},
+           include:{likedBy:true,likedSong:true}
         })
         if(!createSong) return NextResponse.json("Not Found");
         return NextResponse.json(createSong);

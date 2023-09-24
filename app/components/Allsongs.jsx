@@ -8,6 +8,8 @@ import { setCurrentSong, getlikeSongAsync, likeSongAsync } from "../redux/userSl
 const Allsongs = () => {
     const dispatch = useDispatch();
     const mySongs = useAppSelector((state) => state?.user?.mySongs);
+    const allSongs = useAppSelector((state) => state?.user?.allSongs);
+
     // const currentsong = useAppSelector((state) => state?.user?.currentSong);
     const currentUser = useAppSelector((state) => state?.user?.currentUser);
     const Lsongs = useAppSelector((state) => state?.user?.likedSongs);
@@ -45,7 +47,7 @@ const Allsongs = () => {
         <>
             <h1 className='text-white text-2xl font-semibold m-2'>Newest Songs</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-0 m-2  w-1/2">
-                {mySongs?.map((card, index) => (
+                {allSongs?.map((card, index) => (
                     <div key={index} className=" bg-neutral-800 p-4 rounded-lg shadow-md mt-2 h-60 w-40 gap-0 cursor-pointer flex flex-col justify-start items-center">
                         {/* Card Content */}
                         <img alt="img" src={card?.thumbnail} className='w-7/8 h-7/8 rounded-lg' />
