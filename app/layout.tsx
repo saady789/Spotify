@@ -1,6 +1,5 @@
 "use client"
 import './globals.css'
-import type { Metadata } from 'next'
 import { Figtree } from 'next/font/google'
 import Sidebar from './components/Sidebar'
 const font = Figtree({ subsets: ['latin'] })
@@ -8,10 +7,10 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-export const metadata: Metadata = {
-  title: 'Spotify',
-  description: 'Enjoy your favourite songs on My spotify ',
-}
+// export const metadata: Metadata = {
+//   title: 'Spotify',
+//   description: 'Enjoy your favourite songs on My spotify ',
+// }
 
 export default function RootLayout({
   children,
