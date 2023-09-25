@@ -23,25 +23,10 @@ const Allsongs = () => {
         await dispatch(getlikeSongAsync({ id: currentUser?.id }))
     }
 
-    const checkSong = (song) =>{
-        console.log("The song is",song)
-        console.log("ALl songs are ",Lsongs)
-        let ID = song.id;
-        Lsongs.map((item)=>{
-            if(item.likedSongId === ID){
-                console.log("true");
-                return true;
-                
-            }
-        })
-
-
-        // console.log("false");
-        // return false;
-
-
-        
-     }
+    const checkSong = (song) => {
+        return Lsongs.some((item) => item?.likedSong?.id === song.id);
+    }
+    
 
     return (
         <>

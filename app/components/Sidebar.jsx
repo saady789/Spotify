@@ -90,8 +90,8 @@ const Sidebar = () => {
 
                 </div>
 
-                {!m && <h1 className='text-white '>Please Login First</h1>}
-                {m && mySongs.length === 0 && <h1 className='text-white '>No Songs Uploaded Yet</h1>}
+                {!m && <h1 className='text-white flex justify-center items-center '>Please Login First</h1>}
+                {m && mySongs.length === 0 && <h1 className='text-white  flex justify-center items-center'>No Songs Uploaded Yet</h1>}
                 {m && mySongs.length !== 0 &&
                     <div className='w-full overflow-y-auto'>
                         {mySongs.map((song, index) => (

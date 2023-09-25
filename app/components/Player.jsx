@@ -8,11 +8,12 @@ import { BsPlayCircleFill, BsPauseCircleFill } from "react-icons/bs";
 import { BiSolidLike, BiLike } from "react-icons/bi";
 import { FaVolumeMute } from "react-icons/fa"
 import { VscUnmute } from "react-icons/vsc";
-import { likeSongAsync , getlikeSongAsync} from '../redux/userSlice';
+import { likeSongAsync, getlikeSongAsync } from '../redux/userSlice';
 const Player = () => {
   const dispatch = useDispatch();
   const [playing, setPlaying] = useState(true);
   const [position, setPosition] = useState(0); // Track current playback position
+  const Lsongs = useAppSelector((state) => state?.user?.likedSongs);
 
   const [volume, setVolume] = useState(0.6); // 1 is full volume, 0 is muted
   const [muted, setMuted] = useState(false);
@@ -63,9 +64,9 @@ const Player = () => {
       setPlaying(false);
     }
     else {
-      stop();
-      setPosition(0); // Reset the position when stopped
-      setPlaying(false);
+      // stop();
+      // setPosition(0); // Reset the position when stopped
+      // setPlaying(false);
     }
     play();
     setPlaying(true);
@@ -78,10 +79,10 @@ const Player = () => {
 
   const handleVolumeChange = (event) => {
     // if (muted === false) {
-      const newVolume = parseFloat(event.target.value);
-      setVolume(newVolume);
-      console.log("volume updated to ", newVolume);
-      setMuted(false);
+    const newVolume = parseFloat(event.target.value);
+    setVolume(newVolume);
+    console.log("volume updated to ", newVolume);
+    setMuted(false);
     // }
     // else {
     //   return;
@@ -90,7 +91,7 @@ const Player = () => {
   };
 
   const toggleMuted = () => {
-    if(muted===true){
+    if (muted === true) {
       setMuted(false);
       setVolume(0.6)
 
@@ -102,15 +103,15 @@ const Player = () => {
   }
 
   useEffect(() => {
-   if(volume ==0 ){
-    setMuted(true);
-   }
-   else {
-    setMuted(false);
-   }
+    if (volume == 0) {
+      setMuted(true);
+    }
+    else {
+      setMuted(false);
+    }
   }, [volume])
-  
-  const handleLike = async() => {
+
+  const handleLike = async () => {
     console.log("liked");
     let data = {};
     data.currentUser = currentUser;
@@ -120,7 +121,9 @@ const Player = () => {
 
   }
 
-
+  const checkSong = (song) => {
+    return Lsongs.some((item) => item?.likedSong?.id === song.id);
+  }
 
   return (
     <>
@@ -131,7 +134,13 @@ const Player = () => {
             <img alt="img" src={currentSong?.thumbnail} className='rounded-lg h-16 w-30 ' />
             <div className='flex flex-col'>
               <h1 className='font-bold text-2xl ml-2 text-green-500'>{currentSong?.title}</h1>
-              <BiLike className="cursor-pointer mt-2 text-4xl rounded-full  hover:text-green-300 ml-2 text-green-500" onClick={handleLike}/>
+              {checkSong(currentSong) ? (
+                <  BiSolidLike className=" mt-2 text-4xl rounded-full ml-2  hover:text-green-300 text-green-500" />
+
+              ) : (
+                <  BiLike className="cursor-pointer mt-2 text-4xl rounded-full text-green-500 ml-2  hover:text-green-300" onClick={() => handleLike(currentSong)} />
+
+              )}
             </div>
           </div>
           <div className='flex flex-col h-full w-1/3 justify-center items-center'>
