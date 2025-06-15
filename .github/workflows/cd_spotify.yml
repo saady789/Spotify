@@ -2,6 +2,7 @@
 ## push docker image to docker hub 
 ## SSH into our server and start the new image 
 
+
   name: Deploy the app
   on:
     push:
