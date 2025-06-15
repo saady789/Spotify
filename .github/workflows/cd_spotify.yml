@@ -20,13 +20,25 @@
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_PASSWORD }}
         
-        
+
         - name: Build and push  
           uses: docker/build-push-action@v2
           with:
             context: .
             push: true
-            tags: saady7899/spotify:latest
+            tags: saady7899/spotify:latest  
+
+        - name: deploy to ec2
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.EC2_HOST }}
+            username: ${{ secrets.EC2_USERNAME }}
+            key: ${{ secrets.EC2_SSH_KEY }}
+            script: |
+              docker pull saady7899/spotify:latest
+              docker stop spotify || true
+              docker rm spotify || true
+              docker run -d --name spotify -p 3000:3000 saady7899/spotify:latest
 
 
 
