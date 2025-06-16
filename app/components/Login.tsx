@@ -5,10 +5,11 @@ import { GoogleAuthProvider } from 'firebase/auth';
 import { signInWithPopup } from 'firebase/auth';
 import { firebaseAuth } from '../firebase/firebase';
 import { toast } from "react-toastify";
-import { useCurrentUser } from '../hooks/useCurrentUser';
+import { CurrentUser } from '../hooks/useCurrentUser';
 import { useAppSelector } from '../hooks/hooks';
 import { useDispatch } from 'react-redux';
 import { setPage } from '../redux/userSlice';
+import Image from 'next/image';
 interface User {
     name: string | null;
     email: string | null;
@@ -18,6 +19,7 @@ interface User {
 const Login = () => {
     const dispatch = useDispatch();
     const timeLine = useAppSelector((state)=>state?.user?.navigation);
+    
 
     const [status, setStatus] = useState(false);
     const provider = new GoogleAuthProvider();
@@ -55,7 +57,7 @@ const Login = () => {
 
             if (responseData != "InternalServerError") {
                 toast.success("Welcome Back");
-                useCurrentUser("set", responseData)
+                CurrentUser("set", responseData)
                 setCurrentUser(responseData); // Update the currentUser state
                 window.location.href = "/";
             }
@@ -66,7 +68,7 @@ const Login = () => {
     }
     const handleLogout = async () => {
         setStatus(true);
-        useCurrentUser("del", null)
+        CurrentUser("del", null)
         window.location.href = "/";
 
     }
@@ -79,7 +81,7 @@ const Login = () => {
             {currentUser ? (
                 <div className='h-full w-1/2 flex justify-end m-2 text-center'>
                     <button className='rounded-lg rounded-l-full rounded-r-full mr-4 h-1/2 p-2 font-semibold hover:text-white text-xl' onClick={handleLogout}>Logout</button>
-                    <img alt="img" src={currentUser.image || ''} className='rounded-full' />
+                    <Image alt="img" src={currentUser.image || ''} width={40} height={40} className='rounded-full' />
                 </div>
             ) : (
                 <div className='h-full w-1/2 flex justify-end m-2 text-center'>

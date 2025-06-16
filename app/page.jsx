@@ -22,7 +22,7 @@ export default function Home() {
       await dispatch(getlikeSongAsync({id:currentUser?.id}))
     }
     dis();
-  }, [currentUser])
+  }, [currentUser,dispatch])
 
   
  

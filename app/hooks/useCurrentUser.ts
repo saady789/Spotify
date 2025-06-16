@@ -5,7 +5,7 @@ interface User {
     image:string
 }
 
-export const useCurrentUser = async(instruction:"set"|"get"|"del",payload:null|User) => {
+export const CurrentUser = async(instruction:"set"|"get"|"del",payload:null|User) => {
     if(instruction == "set") {
         localStorage.setItem("user",JSON.stringify(payload));
     }

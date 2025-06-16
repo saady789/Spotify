@@ -11,6 +11,8 @@ import { setPage, setCurrentSong, getlikeSongAsync, likeSongAsync } from "../red
 import { useDispatch } from 'react-redux';
 import { AiFillPlayCircle } from "react-icons/ai"
 import { BiSolidLike, BiLike } from "react-icons/bi";
+import Image from 'next/image';
+
 const Liked = () => {
   const m = useAppSelector((state) => state?.user?.currentUser);
   const likedSongs = useAppSelector((state) => state?.user?.likedSongs);
@@ -39,7 +41,7 @@ const Liked = () => {
             {likedSongs.map((card, index) => (
               <div key={index} className="bg-neutral-800 p-4 rounded-lg shadow-md mt-2 h-60 w-40 cursor-pointer flex flex-col justify-start items-center">
                 {/* Card Content */}
-                <img alt="img" src={card?.likedSong?.thumbnail} className="w-7/8 h-7/8 rounded-lg" />
+                <Image alt="img" src={card?.likedSong?.thumbnail}   width={160}  height={160}  className=" rounded-lg" />
                 <h2 className="text-lg mt-2 font-semibold">{card?.likedSong?.title}</h2>
                 <div className="flex justify-start items-center w-full mt-2 ml-2">
                   <div className="w-1/2">

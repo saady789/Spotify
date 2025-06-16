@@ -12,6 +12,7 @@ import { AiFillPlayCircle } from "react-icons/ai"
 import { BiSolidLike, BiLike } from "react-icons/bi";
 import { setCurrentSong, getlikeSongAsync, likeSongAsync } from "../redux/userSlice";
 import { useDispatch } from 'react-redux';
+import Image from 'next/image';
 const Search = () => {
   // const currentsong = useAppSelector((state) => state?.user?.currentSong);
   const currentUser = useAppSelector((state) => state?.user?.currentUser);
@@ -92,8 +93,8 @@ const Search = () => {
         {status === "idle" && songs.length !== 0 &&
           <div className='w-full h-full flex flex-col justify-center items-center '>
             {songs?.map((item) => (
-              <div className='h-20 w-full flex justify-start items-center  mt-2 ml-2  rounded-lg m-2'>
-                <img alt="img" src={item?.thumbnail} className='h-full rounded-lg ' />
+              <div key={item.id} className='h-20 w-full flex justify-start items-center  mt-2 ml-2  rounded-lg m-2'>
+                <Image alt="img" src={item?.thumbnail} width={80} height={80}  className='rounded-lg ' />
                 <div className='flex flex-col justify-center items-center h-full  '>
                   <h1 className='font-semibold text-xl ml-2'>{item?.title}</h1>
                   <div className='flex justify-center items-center'>

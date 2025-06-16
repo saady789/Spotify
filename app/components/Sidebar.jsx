@@ -9,7 +9,7 @@ import { setCurrentUser, openModal , setCurrentSong } from '../redux/userSlice';
 import { setPage, setMySongs } from '../redux/userSlice';
 import { useAppSelector } from '../hooks/hooks';
 import {AllSongAsync} from "../redux/userSlice";
-
+import Image from 'next/image';
 const Sidebar = () => {
     const m = useAppSelector((state) => state?.user?.currentUser);
     const mySongs = useAppSelector((state) => state?.user?.mySongs);
@@ -22,7 +22,7 @@ const Sidebar = () => {
             await dispatch(AllSongAsync());
         }
       fetchSongs();
-    }, [])
+    }, [dispatch])
     
     useEffect(() => {
         if (!m) return;
@@ -44,7 +44,7 @@ const Sidebar = () => {
 
         }
         getMySongs();
-    }, [m])
+    }, [dispatch, m])
 
     useEffect(() => {
         const getUser = async () => {
@@ -54,7 +54,7 @@ const Sidebar = () => {
             }
         }
         getUser();
-    }, [])
+    }, [dispatch])
 
     const handleOpen = async () => {
         await dispatch(openModal());
@@ -96,7 +96,7 @@ const Sidebar = () => {
                     <div className='w-full overflow-y-auto'>
                         {mySongs.map((song, index) => (
                             <div className='w-full h-20 mt-2 flex items-center cursor-pointer rounded-lg hover:bg-neutral-700' key={index} onClick={async()=>{await dispatch(setCurrentSong(song))}}>
-                                <img src={song?.thumbnail} alt="img" className='w-1/3 h-3/4 rounded-lg ml-4' />
+                                <Image src={song?.thumbnail} alt="img" width={160} height={120} className='rounded-lg ml-4' />
                                 <h1 className='text-white font-semibold ml-4' >{song?.title}</h1>
 
                             </div>

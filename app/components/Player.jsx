@@ -9,6 +9,8 @@ import { BiSolidLike, BiLike } from "react-icons/bi";
 import { FaVolumeMute } from "react-icons/fa"
 import { VscUnmute } from "react-icons/vsc";
 import { likeSongAsync, getlikeSongAsync } from '../redux/userSlice';
+import Image from 'next/image';
+import { useCallback } from 'react';
 const Player = () => {
   const dispatch = useDispatch();
   const [playing, setPlaying] = useState(true);
@@ -49,13 +51,21 @@ const Player = () => {
     }
   }
 
-  const handleStop = async () => {
-    if (playing) {
-      stop();
-      setPosition(0); // Reset the position when stopped
-      setPlaying(false);
-    }
+  // const handleStop = async () => {
+  //   if (playing) {
+  //     stop();
+  //     setPosition(0); // Reset the position when stopped
+  //     setPlaying(false);
+  //   }
+  // }
+
+  const handleStop = useCallback(async () => {
+  if (playing) {
+    stop();
+    setPosition(0); // Reset the position when stopped
+    setPlaying(false);
   }
+}, [playing, stop]);
 
   const handleStart = async () => {
     if (playing) {
@@ -75,7 +85,7 @@ const Player = () => {
   useEffect(() => {
     handleStop();
 
-  }, [currentSong])
+  }, [currentSong,handleStop])
 
   const handleVolumeChange = (event) => {
     // if (muted === false) {
@@ -131,7 +141,7 @@ const Player = () => {
         <div className="fixed inset-x-0 bottom-0 h-20 bg-neutral-800 text-white p-4 bg-opacity-100 flex ">
           {/* Modal content */}
           <div className="flex  items-center w-1/3 h-full ">
-            <img alt="img" src={currentSong?.thumbnail} className='rounded-lg h-16 w-30 ' />
+            <Image alt="img" src={currentSong?.thumbnail} width={120}   height={64} className='rounded-lg ' />
             <div className='flex flex-col'>
               <h1 className='font-bold text-2xl ml-2 text-green-500'>{currentSong?.title}</h1>
               {checkSong(currentSong) ? (
