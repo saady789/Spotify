@@ -51,21 +51,21 @@ const Player = () => {
     }
   }
 
-  // const handleStop = async () => {
-  //   if (playing) {
-  //     stop();
-  //     setPosition(0); // Reset the position when stopped
-  //     setPlaying(false);
-  //   }
-  // }
-
-  const handleStop = useCallback(async () => {
-  if (playing) {
-    stop();
-    setPosition(0); // Reset the position when stopped
-    setPlaying(false);
+  const handleStop = async () => {
+    if (playing) {
+      stop();
+      setPosition(0); // Reset the position when stopped
+      setPlaying(false);
+    }
   }
-}, [playing, stop]);
+
+//   const handleStop = useCallback(async () => {
+//   if (playing) {
+//     stop();
+//     setPosition(0); // Reset the position when stopped
+//     setPlaying(false);
+//   }
+// }, [playing, stop]);
 
   const handleStart = async () => {
     if (playing) {
@@ -85,7 +85,7 @@ const Player = () => {
   useEffect(() => {
     handleStop();
 
-  }, [currentSong,handleStop])
+  }, [currentSong])
 
   const handleVolumeChange = (event) => {
     // if (muted === false) {
