@@ -34,10 +34,11 @@
             username: ${{ secrets.EC2_USERNAME }}
             key: ${{ secrets.EC2_SSH_KEY }}
             script: |
-              docker pull saady7899/spotify:latest
               docker stop spotify || true
               docker rm spotify || true
-              docker run -d --name spotify -p 3000:3000 saady7899/spotify:latest
+              docker rmi saady7899/spotify:latest || true
+              docker pull saady7899/spotify:latest
+              docker run -d --name spotify -p 3000:3000 -e HOST=0.0.0.0 saady7899/spotify:latest
 
 
 
